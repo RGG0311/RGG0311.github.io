@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEAM JTB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* ===== 색상: 여기 값만 바꾸면 전체 색이 바뀌어요 ===== */
+  :root {
+    --steel-light: #eef1f4;
+    --steel: #c9ced3;
+    --steel-dark: #5b636b;
+    --ink: #1c2430;
+    --red: #d7263d;
+    --paper: #f7f8f9;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    line-height: 1.7;
+  }
+  a { color: inherit; }
+
+  /* ===== 상단 메뉴 ===== */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap;
+    padding: 0.9rem clamp(1rem, 4vw, 3rem);
+    background: rgba(247, 248, 249, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--steel);
+  }
+  .logo {
+    font-family: "Black Han Sans", sans-serif; font-size: 1.6rem;
+    background: none; border: 0; padding: 0; color: var(--ink); cursor: pointer;
+  }
+  nav { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .pill {
+    font: inherit; font-weight: 600; font-size: 0.95rem;
+    padding: 0.45rem 1rem;
+    border: 2px solid var(--ink); border-radius: 999px;
+    background: transparent; color: var(--ink); cursor: pointer; text-decoration: none;
+    display: inline-block; line-height: 1.4;
+    transition: background 0.15s, color 0.15s;
+  }
+  .pill:hover { background: var(--steel-light); }
+  .pill[aria-current="page"], .pill[aria-expanded="true"] { background: var(--red); border-color: var(--red); color: #fff; }
+  .pill.small { font-size: 0.85rem; padding: 0.3rem 0.8rem; }
+  button:focus-visible, a:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+
+  main { max-width: 1040px; margin: 0 auto; padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 4vw, 3rem); }
+  .view[hidden] { display: none; }
+  .view { animation: appear 0.35s ease-out; }
+  @keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  h1, h2 { font-family: "Black Han Sans", sans-serif; font-weight: 400; line-height: 1.1; margin: 0 0 1rem; }
+  h1 { font-size: clamp(3rem, 8vw, 5rem); }
+  h2 { font-size: clamp(2rem, 5vw, 3rem); }
+
+  /* ===== 홈: 양푼 ===== */
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+  .bowl-area { padding: 8% 4% 0; text-align: center; }
+  .bowl {
+    position: relative; display: block; width: 100%; max-width: 440px; aspect-ratio: 1; margin: 0 auto;
+    border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+    background: radial-gradient(circle,
+      #d6dbe0 0 62%, #a9b1b8 63% 66%,
+      #e4e8eb 67% 72%, #7d868f 73% 75%, #cfd4d9 76% 100%);
+    box-shadow: inset 0 -18px 40px rgba(28,36,48,0.25), 0 24px 40px -20px rgba(28,36,48,0.45);
+  }
+  /* 스테인리스 테두리 광택 */
+  .bowl::before {
+    content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+    background: conic-gradient(from 30deg, rgba(255,255,255,0.7), transparent 12%, transparent 40%,
+      rgba(255,255,255,0.45) 52%, transparent 64%, transparent 90%, rgba(255,255,255,0.7));
+    mix-blend-mode: soft-light;
+  }
+  /* 정체불명의 액체 */
+  .liquid {
+    position: absolute; inset: 17%; border-radius: 50%; overflow: hidden;
+    background: #4d4436;
+    box-shadow: inset 0 10px 26px rgba(0,0,0,0.55);
+  }
+  .swirl {
+    position: absolute; inset: -12%; display: block;
+    background: conic-gradient(from 0deg, #5e3f6e, #7d8a3a 17%, #b8612b 33%, #3f5f52 50%, #8a4a63 67%, #6d7a35 84%, #5e3f6e);
+    filter: blur(12px) saturate(1.15);
+  }
+  .swirl::after {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-conic-gradient(from 10deg, rgba(255,255,255,0.14) 0 8deg, transparent 8deg 40deg);
+    filter: blur(4px);
+  }
+  .bubble {
+    position: absolute; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.35); background: rgba(255,255,255,0.08);
+  }
+  .liquid::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 34% 28%, rgba(255,255,255,0.3), transparent 28%),
+      radial-gradient(circle, transparent 58%, rgba(0,0,0,0.4));
+  }
+  /* 국자 */
+  .ladle {
+    position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none;
+    transform: rotate(-35deg);
+    filter: drop-shadow(0 6px 5px rgba(0,0,0,0.35));
+  }
+  .bowl.stirring .ladle { animation: ladle-stir 2.2s cubic-bezier(.45,.05,.35,1) forwards; }
+  .bowl.stirring .swirl { animation: liquid-spin 3.4s cubic-bezier(.3,.1,.2,1) forwards; }
+  @keyframes ladle-stir {
+    0%   { transform: rotate(-35deg) scale(1); }
+    15%  { transform: rotate(10deg) scale(0.97); }
+    85%  { transform: rotate(650deg) scale(0.97); }
+    100% { transform: rotate(685deg) scale(1); }
+  }
+  @keyframes liquid-spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(900deg); }
+  }
+  .bowl-hint { margin: 1rem 0 0; color: var(--steel-dark); font-size: 0.9rem; }
+
+  .slogan { font-size: clamp(1.2rem, 2.6vw, 1.55rem); font-weight: 600; line-height: 1.35; margin: 0 0 1.5rem; }
+  .intro p { max-width: 60ch; margin: 0 0 1rem; }
+  .code-list { list-style: none; padding: 0; margin: 1.5rem 0; border-left: 4px solid var(--red); }
+  .code-list li { padding: 0.35rem 0 0.35rem 1rem; font-weight: 600; }
+  .signoff { font-family: "Black Han Sans", sans-serif; font-size: 1.5rem; color: var(--red); margin-top: 1.5rem; }
+
+  /* ===== 공지 ===== */
+  .notice { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding: 1.2rem 0; border-top: 2px solid var(--steel); }
+  .notice:last-child { border-bottom: 2px solid var(--steel); }
+  .notice time { font-family: "Black Han Sans", sans-serif; font-size: 1.3rem; color: var(--red); }
+  .notice h3 { margin: 0 0 0.2rem; font-size: 1.1rem; }
+  .notice p { margin: 0; color: var(--steel-dark); }
+
+  /* ===== 일정 + 지도 ===== */
+  #map {
+    width: 100%; height: clamp(260px, 45vw, 420px);
+    border: 2px solid var(--ink); border-radius: 18px; overflow: hidden;
+    margin-bottom: 2rem; background: var(--steel-light);
+  }
+  #map[hidden] { display: none; }
+  .map-error { padding: 1rem; color: var(--steel-dark); }
+  .event { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding: 1.4rem 0; border-top: 2px solid var(--steel); }
+  .event:last-child { border-bottom: 2px solid var(--steel); }
+  .event.past { opacity: 0.55; }
+  .event-date strong { display: block; font-family: "Black Han Sans", sans-serif; font-weight: 400; font-size: 1.6rem; color: var(--red); line-height: 1.1; }
+  .event-date span { color: var(--steel-dark); font-size: 0.9rem; }
+  .event h3 { margin: 0 0 0.2rem; font-size: 1.2rem; }
+  .event-place { margin: 0; font-weight: 600; }
+  .event-memo { margin: 0.2rem 0 0; color: var(--steel-dark); }
+  .event-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
+  .event-comments { margin-top: 1rem; }
+  .event-comments[hidden] { display: none; }
+  .comment-guide {
+    margin: 0 0 0.8rem; padding: 0.7rem 1rem;
+    background: var(--steel-light); border-radius: 10px; font-size: 0.92rem;
+  }
+
+  /* ===== 멤버 ===== */
+  .members { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem 1.5rem; }
+  .member { text-align: center; }
+  .spoon {
+    width: 110px; height: 110px; margin: 0 auto 0.8rem; border-radius: 50%;
+    display: grid; place-content: center;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--steel) 60%, var(--steel-dark));
+    font-family: "Black Han Sans", sans-serif; font-size: 1.8rem; color: var(--ink);
+  }
+  .member h3 { margin: 0; font-size: 1.15rem; }
+  .member .role { color: var(--red); font-weight: 600; margin: 0.1rem 0 0.3rem; }
+  .member p { margin: 0; color: var(--steel-dark); font-size: 0.95rem; }
+
+  footer { text-align: center; padding: 3rem 1rem; color: var(--steel-dark); font-size: 0.9rem; }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; }
+    .notice, .event { grid-template-columns: 1fr; gap: 0.3rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .view { animation: none; }
+    .bowl.stirring .ladle, .bowl.stirring .swirl { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="logo" data-tab="home">TEAM JTB</button>
+  <nav aria-label="메인 메뉴">
+    <button class="pill" data-tab="home">홈</button>
+    <button class="pill" data-tab="notice">공지</button>
+    <button class="pill" data-tab="schedule">일정</button>
+    <button class="pill" data-tab="members">멤버</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ===== 홈 ===== -->
+  <section class="view" id="home">
+    <div class="hero">
+      <div class="bowl-area">
+        <button class="bowl" id="bowl" aria-label="국자로 양푼 휘젓기">
+          <span class="liquid">
+            <span class="swirl">
+              <span class="bubble" style="width:9%;height:9%;left:30%;top:24%"></span>
+              <span class="bubble" style="width:5%;height:5%;left:62%;top:58%"></span>
+              <span class="bubble" style="width:7%;height:7%;left:44%;top:70%"></span>
+              <span class="bubble" style="width:4%;height:4%;left:70%;top:34%"></span>
+            </span>
+          </span>
+          <!-- 위에서 내려다본 국자: 컵은 액체 안, 손잡이는 양푼 밖으로 -->
+          <svg class="ladle" viewBox="0 0 100 100" aria-hidden="true">
+            <defs>
+              <linearGradient id="steelGrad" x1="0" x2="1">
+                <stop offset="0" stop-color="#8e979f"/>
+                <stop offset="0.45" stop-color="#f4f6f8"/>
+                <stop offset="1" stop-color="#9aa3ab"/>
+              </linearGradient>
+              <radialGradient id="cupGrad" cx="0.4" cy="0.35" r="0.7">
+                <stop offset="0" stop-color="#ffffff"/>
+                <stop offset="0.55" stop-color="#c9ced3"/>
+                <stop offset="1" stop-color="#6f7880"/>
+              </radialGradient>
+            </defs>
+            <path d="M48.6 22 L47.2 -4 Q50 -8 52.8 -4 L51.4 22 Z" fill="url(#steelGrad)"/>
+            <circle cx="50" cy="-4.5" r="1.3" fill="#5b636b"/>
+            <circle cx="50" cy="32" r="11" fill="url(#cupGrad)"/>
+            <circle cx="50" cy="32" r="7.5" fill="#6a5a3e" opacity="0.8"/>
+          </svg>
+        </button>
+        <p class="bowl-hint">양푼을 누르면 국자로 휘저어요</p>
+      </div>
+      <div class="intro">
+        <h1>TEAM JTB</h1>
+        <p class="slogan">One vessel. No rules.<br>Pure chaos, perfectly balanced.</p>
+        <p>They said mixology was an art reserved for the refined. We said: hand us the biggest bowl you've got.</p>
+        <p>TEAM JTB was born not in a boardroom, but around a single steel basin, where vodka meets whatever else is left standing and hesitation has no seat at the table. We don't measure. We don't garnish. We don't apologize.</p>
+        <p>This is not a cocktail hour. This is a ritual: six souls, one 양푼, and an unshakable belief that if it can be poured, it can be combined.</p>
+        <ul class="code-list">
+          <li>Judgment is optional</li>
+          <li>Tolerance is the only stat that matters</li>
+          <li>Balance is for people who measure</li>
+        </ul>
+        <p>We don't sip. We don't savor. We commit to the bowl, to each other, and to whatever tomorrow morning has in store for us.</p>
+        <p class="signoff">Bring a spoon.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 공지: <article> 묶음을 복사해서 공지를 추가하세요 ===== -->
+  <section class="view" id="notice" hidden>
+    <h2>공지</h2>
+    <article class="notice">
+      <time>9/30</time>
+      <div>
+        <h3>정기모임</h3>
+        <p>오후 6시, 장소 입력</p>
+      </div>
+    </article>
+    <article class="notice">
+      <time>10/5</time>
+      <div>
+        <h3>공지 제목</h3>
+        <p>세부 내용을 여기에 적어주세요.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===== 일정: 내용은 아래 <script>의 EVENTS에서 수정하세요 ===== -->
+  <section class="view" id="schedule" hidden>
+    <h2>일정</h2>
+    <div id="map" hidden></div>
+    <div id="event-list"></div>
+  </section>
+
+  <!-- ===== 멤버: 역할과 한 줄 소개를 채워주세요 ===== -->
+  <section class="view" id="members" hidden>
+    <h2>멤버</h2>
+    <div class="members">
+      <div class="member"><div class="spoon">태범</div><h3>김태범</h3><p class="role">역할</p><p>한 줄 소개</p></div>
+      <div class="member"><div class="spoon">형민</div><h3>김형민</h3><p class="role">역할</p><p>한 줄 소개</p></div>
+      <div class="member"><div class="spoon">홍민</div><h3>박홍민</h3><p class="role">역할</p><p>한 줄 소개</p></div>
+      <div class="member"><div class="spoon">준서</div><h3>박준서</h3><p class="role">역할</p><p>한 줄 소개</p></div>
+      <div class="member"><div class="spoon">재호</div><h3>이재호</h3><p class="role">역할</p><p>한 줄 소개</p></div>
+      <div class="member"><div class="spoon">범진</div><h3>여범진</h3><p class="role">역할</p><p>한 줄 소개</p></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>© TEAM JTB</footer>
+
+<script>
+  /* ================================================================
+     ✏️ 여기만 수정하면 돼요
+     ================================================================ */
+
+  // 1) 카카오 지도 JavaScript 키 (developers.kakao.com에서 발급)
+  //    비워두면 지도 대신 "카카오맵 열기" 버튼만 나와요.
+  const KAKAO_JS_KEY = "";
+
+  // 2) 댓글(giscus) 설정 (giscus.app에서 복사)
+  //    비워두면 댓글 대신 안내 문구가 나와요.
+  const GISCUS = {
+    repo: "RGG0311/RGG0311.github.io",
+    repoId: "",
+    category: "Announcements",
+    categoryId: ""
+  };
+
+  // 3) 일정 목록: { } 한 묶음이 일정 하나예요. 복사해서 추가하세요.
+  //    id는 일정마다 달라야 해요 (댓글이 id별로 따로 저장돼요).
+  //    place는 카카오맵에서 검색할 가게 이름이에요. 
+  //    엉뚱한 지점이 잡히면 lat(위도), lng(경도)를 직접 넣으세요.
+  const EVENTS = [
+    {
+      id: "2026-10-07",
+      date: "2026-10-07",
+      time: "19:00",
+      title: "신입 환영회",
+      place: "을지로3가역",
+      lat: null, lng: null,
+      memo: "메모 입력"
+    },
+    {
+      id: "2026-10-14",
+      date: "2026-10-14",
+      time: "18:30",
+      title: "일정 제목",
+      place: "가게 이름",
+      lat: null, lng: null,
+      memo: ""
+    }
+  ];
+
+  /* ================================================================
+     아래는 동작 코드예요. 건드리지 않아도 돼요.
+     ================================================================ */
+
+  // ----- 화면 전환 -----
+  const views = document.querySelectorAll(".view");
+  const navButtons = document.querySelectorAll("nav [data-tab]");
+
+  function showView(id) {
+    if (!document.getElementById(id) || !document.getElementById(id).classList.contains("view")) id = "home";
+    views.forEach(v => v.hidden = (v.id !== id));
+    navButtons.forEach(b => {
+      if (b.dataset.tab === id) b.setAttribute("aria-current", "page");
+      else b.removeAttribute("aria-current");
+    });
+    window.scrollTo(0, 0);
+    if (id === "schedule") prepareMap();
+  }
+  document.querySelectorAll("[data-tab]").forEach(btn => {
+    btn.addEventListener("click", () => { location.hash = btn.dataset.tab; });
+  });
+  window.addEventListener("hashchange", () => showView(location.hash.slice(1)));
+
+  // ----- 양푼 휘젓기 -----
+  const bowl = document.getElementById("bowl");
+  bowl.addEventListener("click", () => {
+    bowl.classList.remove("stirring");
+    void bowl.offsetWidth;          // 애니메이션을 처음부터 다시 시작
+    bowl.classList.add("stirring");
+  });
+
+  // ----- 일정 목록 그리기 -----
+  const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
+  const listEl = document.getElementById("event-list");
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+
+  function kakaoLink(ev) {
+    if (ev.lat && ev.lng) return `https://map.kakao.com/link/map/${encodeURIComponent(ev.place)},${ev.lat},${ev.lng}`;
+    return `https://map.kakao.com/link/search/${encodeURIComponent(ev.place)}`;
+  }
+  function escapeHTML(s) {
+    return String(s || "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  EVENTS.slice().sort((a, b) => a.date.localeCompare(b.date)).forEach(ev => {
+    const d = new Date(ev.date + "T00:00:00");
+    const art = document.createElement("article");
+    art.className = "event" + (d < today ? " past" : "");
+    art.innerHTML = `
+      <div class="event-date">
+        <strong>${d.getMonth() + 1}/${d.getDate()}</strong>
+        <span>${DAYS[d.getDay()]}요일 ${escapeHTML(ev.time)}</span>
+      </div>
+      <div>
+        <h3>${escapeHTML(ev.title)}</h3>
+        <p class="event-place">📍 ${escapeHTML(ev.place)}</p>
+        ${ev.memo ? `<p class="event-memo">${escapeHTML(ev.memo)}</p>` : ""}
+        <div class="event-actions">
+          ${KAKAO_JS_KEY ? `<button class="pill small" data-action="map">지도에서 보기</button>` : ""}
+          <a class="pill small" href="${kakaoLink(ev)}" target="_blank" rel="noopener">카카오맵 열기</a>
+          <button class="pill small" data-action="comments" aria-expanded="false">참가 댓글</button>
+        </div>
+        <div class="event-comments" hidden></div>
+      </div>`;
+    art.querySelector('[data-action="comments"]').addEventListener("click", e => toggleComments(ev, art, e.currentTarget));
+    const mapBtn = art.querySelector('[data-action="map"]');
+    if (mapBtn) mapBtn.addEventListener("click", () => focusOnMap(ev.id));
+    listEl.appendChild(art);
+  });
+
+  // ----- 참가 댓글 (giscus) : 한 번에 하나만 열려요 -----
+  let openPanel = null;
+  function toggleComments(ev, art, btn) {
+    const panel = art.querySelector(".event-comments");
+    const isOpen = !panel.hidden;
+    if (openPanel) { openPanel.panel.hidden = true; openPanel.panel.innerHTML = ""; openPanel.btn.setAttribute("aria-expanded", "false"); openPanel = null; }
+    if (isOpen) return;
+
+    panel.hidden = false;
+    btn.setAttribute("aria-expanded", "true");
+    openPanel = { panel, btn };
+
+    if (!GISCUS.repoId || !GISCUS.categoryId) {
+      panel.innerHTML = `<p class="comment-guide">댓글 기능이 아직 연결되지 않았어요. 코드 위쪽 GISCUS 설정을 채워주세요.</p>`;
+      return;
+    }
+    panel.innerHTML = `<p class="comment-guide">GitHub로 로그인한 뒤 <strong>참석 / 불참 / 미정</strong>과 한마디를 남겨주세요. 👍 반응으로 간단히 표시해도 돼요.</p>`;
+    const s = document.createElement("script");
+    s.src = "https://giscus.app/client.js";
+    s.setAttribute("data-repo", GISCUS.repo);
+    s.setAttribute("data-repo-id", GISCUS.repoId);
+    s.setAttribute("data-category", GISCUS.category);
+    s.setAttribute("data-category-id", GISCUS.categoryId);
+    s.setAttribute("data-mapping", "specific");
+    s.setAttribute("data-term", "event-" + ev.id);
+    s.setAttribute("data-reactions-enabled", "1");
+    s.setAttribute("data-emit-metadata", "0");
+    s.setAttribute("data-input-position", "top");
+    s.setAttribute("data-theme", "light");
+    s.setAttribute("data-lang", "ko");
+    s.crossOrigin = "anonymous";
+    s.async = true;
+    panel.appendChild(s);
+  }
+
+  // ----- 카카오 지도 -----
+  const mapEl = document.getElementById("map");
+  let map = null, mapLoading = false, bounds = null;
+  const markers = {};
+
+  function prepareMap() {
+    if (!KAKAO_JS_KEY) return;
+    mapEl.hidden = false;
+    if (map) { map.relayout(); return; }
+    if (mapLoading) return;
+    mapLoading = true;
+    const s = document.createElement("script");
+    s.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_JS_KEY}&libraries=services&autoload=false`;
+    s.onload = () => kakao.maps.load(initMap);
+    s.onerror = () => { mapEl.innerHTML = `<p class="map-error">지도를 불러오지 못했어요. 카카오 개발자 설정에서 사이트 도메인이 등록됐는지 확인하세요.</p>`; };
+    document.head.appendChild(s);
+  }
+
+  function initMap() {
+    map = new kakao.maps.Map(mapEl, { center: new kakao.maps.LatLng(37.5665, 126.978), level: 6 });
+    bounds = new kakao.maps.LatLngBounds();
+    const places = new kakao.maps.services.Places();
+    EVENTS.forEach(ev => {
+      if (ev.lat && ev.lng) addMarker(ev, ev.lat, ev.lng);
+      else places.keywordSearch(ev.place, (data, status) => {
+        if (status === kakao.maps.services.Status.OK) addMarker(ev, data[0].y, data[0].x);
+      });
+    });
+  }
+
+  function addMarker(ev, lat, lng) {
+    const pos = new kakao.maps.LatLng(lat, lng);
+    const marker = new kakao.maps.Marker({ map, position: pos });
+    const info = new kakao.maps.InfoWindow({
+      content: `<div style="padding:6px 10px;font-size:13px;line-height:1.4;white-space:nowrap"><b>${escapeHTML(ev.title)}</b><br>${escapeHTML(ev.place)}</div>`
+    });
+    kakao.maps.event.addListener(marker, "click", () => openInfo(ev.id));
+    markers[ev.id] = { marker, info, pos };
+    bounds.extend(pos);
+    map.setBounds(bounds);
+  }
+
+  function openInfo(id) {
+    Object.values(markers).forEach(m => m.info.close());
+    const m = markers[id];
+    if (m) { m.info.open(map, m.marker); map.panTo(m.pos); }
+  }
+
+  function focusOnMap(id) {
+    mapEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (markers[id]) openInfo(id);
+  }
+
+  // 첫 화면 표시
+  showView(location.hash.slice(1) || "home");
+</script>
+</body>
+</html>
