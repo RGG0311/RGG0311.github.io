@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -259,5 +259,7 @@
   const bowl = document.getElementById("bowl");
   bowl.addEventListener("click", () => bowl.classList.toggle("stirred"));
 </script>
+</body>
+</html>
 </body>
 </html>
